@@ -7,6 +7,46 @@ from urllib.parse import quote
 
 app = Flask(__name__)
 
+def get_lynx_players():
+    try:
+        season = 2025
+        api_key = "sb1d4svo6l0foz1sdnberho"
+        # Fetch Lynx roster for the season
+        roster_url = f"https://api.sportsblaze.com/wnba/v1/rosters/{season}.json?key={api_key}&team=Minnesota%20Lynx"
+        roster_response = requests.get(roster_url)
+        lynx_player_ids = set()
+        headshot_map = {}
+        if roster_response.status_code == 200:
+            roster_data = roster_response.json()
+            if roster_data.get("teams"):
+                for player in roster_data["teams"][0].get("roster", []):
+                    headshot_map[player["id"]] = player.get("headshot")
+        else:
+            print("Error fetching roster:", roster_response.status_code)
+            return []
+
+        # Now fetch all player split stats
+        stats_url = (
+            f"https://api.sportsblaze.com/wnba/v1/splits/players/{season}/regular_season.json"
+            f"?key={api_key}&stats=average_points"
+        )
+        stats_response = requests.get(stats_url)
+        if stats_response.status_code == 200:
+            stats_data = stats_response.json()
+            all_players = stats_data.get("players", [])
+            lynx_players = [p for p in all_players if p.get("id") in headshot_map]
+            lynx_players.sort(key=lambda p: p["stats"]["average"].get("points", 0), reverse=True)
+            top_lynx_players = lynx_players[:6]
+            for player in top_lynx_players:
+                player["headshot"] = headshot_map.get(player["id"])
+            return top_lynx_players
+        else:
+            print("Error fetching split stats:", stats_response.status_code)
+            return []
+    except Exception as e:
+        print("Error fetching leaderboard:", e)
+        return []
+
 def get_recent_games(num=5):
     season = 2025
     url = f"https://api.sportsblaze.com/wnba/v1/schedule/season/{season}.json?key=sb1d4svo6l0foz1sdnberho"
@@ -107,7 +147,8 @@ def show_games():
             
             # Return/render something displaying games
             recent_games = get_recent_games(num=5)
-            return render_template("games.html", games=games, recent_games=recent_games)
+            lynx_players = get_lynx_players()
+            return render_template("games.html", games=games, recent_games=recent_games, lynx_players=lynx_players)
         else:
             # Handle the error: show error message
             return "There was an error - sorry!"
@@ -115,4 +156,20 @@ def show_games():
         # Handle exceptions
         return f"There was an error: {e}"
     
-    
+@app.route("/players/<player_id>")
+def player_gamelog(player_id):
+    # Fetch gamelogs for this player from the API
+    season = 2025
+    api_key = "sb1d4svo6l0foz1sdnberho"
+    url = f"https://api.sportsblaze.com/wnba/v1/gamelogs/players/{season}/{player_id}.json?key={api_key}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        print(data.keys())
+        print(data.get("results"))
+        print(data.get("total"))
+        player = data.get("player", {})
+        games = data.get("games", [])
+        return render_template("player_gamelog.html", player=player, games=games)
+    else:
+        return f"Could not fetch gamelog for this player (status {response.status_code})"

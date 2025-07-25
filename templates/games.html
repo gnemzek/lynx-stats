@@ -8,42 +8,61 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
-    <title>WNBA Fan Dashboard</title>
+    <link rel="stylesheet" href="https://use.typekit.net/aqd8lcf.css">
+    <title>Lynx Fan Dashboard</title>
 </head>
 
 <body>
-    <h1>WNBA Fan Dashboard</h1>
-    <p><i>All times are in Central time</i></p>
+    <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Minnesota Lynx Fan Dashboard"
+        class="img-fluid">
+    <h1 class="sr-only">Lynx Fan Dashboard</h1>
 
-    <div class="row">
-        <div class="col-md-6 todays-games">
-            <h2>Today's WNBA Games</h2>
+    <div class="container main-container">
+        <div class="row">
+            <div class="col-md-6 col-12 todays-games">
+                <h2>Today's WNBA Games</h2>
+                <p><i>All times are in Central time</i></p>
 
-            {% for game in games %}
-            <p>{{ game.teams.away.name }} at {{ game.teams.home.name }}</p>
-            <ul>
-                <li>
-                    <span class="venue-date"> {{ game.venue.name }} on {{ game.readable_date }} </span>
-                </li>
-                <li>
-                    <span class="status">{{ game.status }}</span>
-                </li>
-                <li>
-                    <span class="score">{{ game.score_display }} </span>
-                </li>
-            </ul>
+                {% for game in games %}
+                <p>
+                    <span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span><br>
+                    <span class="game-date">{{ game.venue.name }} on {{ game.readable_date }}</span> <br>
+                    <span class="game-status"> {{game.status }}</span> <br>
+                    <span class="recent-score">{{ game.score_display }}</span>
+                </p>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6 col-12 past-games">
+                <h2>Recent WNBA Games</h2>
+                <p><i>All times are in Central time</i></p>
+
+                {% for game in recent_games %}
+                <p>
+                    <span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span><br>
+                    <span class="game-date"> {{ game.readable_date }}</span> <br>
+                    <span class="recent-score">{{ game.score_display }}</span>
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div class="row leaderboard">
+            <h2>Lynx Leaderboard</h2>
+            {% for player in lynx_players %}
+            <div class="col-md-4 col-12 leaderboard-player-wrapper">
+                <div class="leaderboard-player-inner">
+                    <h3>{{ player.name }}</h3>
+                    <p>{{ player.stats.average.points | round(1) }} PPG </p>
+                    <a href="{{ url_for('player_gamelog', player_id=player.id) }}">More Stats</a>
+                    <img src="{{ player.headshot }}" alt="{{ player.name }} headshot" class="img-fluid player-headshot">
+                </div>
+            </div>
             {% endfor %}
         </div>
 
-        <div class="col-md-6 past-games">
-            <h2>Recent Games</h2>
-            {% for game in recent_games %}
-            <p>
-                {{ game.teams.away.name }} at {{ game.teams.home.name }} on {{ game.readable_date }} <br>
-                <span class="recent-score">{{ game.score_display }}</span>
-            </p>
-            {% endfor %}
-        </div>
+
     </div>
 </body>
 

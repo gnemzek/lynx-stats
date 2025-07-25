@@ -46,3 +46,8 @@ A project built for the Boot.dev Hackathon Weekend. The main goal of this projec
    [http://localhost:5000/](http://localhost:5000/)
 
 
+## Limitations
+
+Due to API limitations, all games do not appear in the inidivdual players' gamelog pages. 
+
+

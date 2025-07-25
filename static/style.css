@@ -1,3 +1,73 @@
-h1 {
-    color: orange;
+/* stop the rows from going off the page and adding a horizontal scroll */
+.row {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+}
+
+.sr-only {
+    display: none;
+}
+
+.main-container {
+    margin-top: 30px;
+}
+
+h1, h2{
+    font-family: roc-grotesk, Helvetica, Arial, Roboto, sans-serif;
+    font-weight: bold !important;
+}
+
+h3 {
+    font-family: swear-display, Arial, Helvetica, Roboto, sans-serif;
+}
+
+h2 {
+    text-align: center;
+    color: white !important;
+    background-color: #0a1c32;
+    padding: 10px;
+}
+
+p, a {
+    font-family: roc-grotesk, Helvetica, Arial, Roboto, sans-serif;
+}
+
+/* Today/Past Game Styles */
+.past-games,
+.todays-games {
+    text-align: center;
+}
+
+span.game-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Leaderboard Styles */
+
+.leaderboard {
+    justify-content: center;
+}
+
+.leaderboard-player-wrapper {
+    margin-bottom: 30px;
+    padding: 10px 10px 0 10px;
+}
+
+.leaderboard-player-inner {
+    background: #0C233F;
+    background: linear-gradient(160deg, rgba(12, 35, 63, 1) 29%, rgba(118, 184, 67, 1) 100%);
+    padding: 10px 10px 0 10px;
+}
+
+.leaderboard h3,
+.leaderboard p,
+.leaderboard a {
+    color: white;
+    text-align: center;
+}
+
+.leaderboard a {
+    display: block;
+    margin-bottom: 20px
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.typekit.net/aqd8lcf.css">
+    <title>Lynx Fan Dashboard</title>
+</head>
+
+<body>
+    <div class="stats-header">
+        <h1>Stats for {{ player.name }}</h1>
+        
+    </div>
+    <div class="container">
+        <p><i>Note: due to API limitations, only a portion of this player's games may appear.</i></p>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Opponent</th>
+                <th>Points</th>
+                <th>Rebounds</th>
+                <th>Assists</th>
+            </tr>
+            {% for game in games %}
+            <tr>
+                <td>{{ game.date }}</td>
+                <td>{{ game.teams.away.name }} vs {{ game.teams.home.name }}</td>
+                <td>{{ game.stats.points }}</td>
+                <td>{{ game.stats.rebounds }}</td>
+                <td>{{ game.stats.assists }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
