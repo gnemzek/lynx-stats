@@ -7,22 +7,66 @@ from urllib.parse import quote
 
 app = Flask(__name__)
 
+def get_recent_games(num=5):
+    season = 2025
+    url = f"https://api.sportsblaze.com/wnba/v1/schedule/season/{season}.json?key=sb1d4svo6l0foz1sdnberho"
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        all_games = data.get("games", [])
+
+        # Get only games with a 'Final' status, sort descending by date
+        recent_games = [
+            game for game in all_games
+            if game.get("status") == "Final"
+        ]
+        # Sort by date, newest first
+        recent_games.sort(key=lambda g: g["date"], reverse=True)
+        # Take the last 3 (or whatever number you want)
+        recent_games = recent_games[:num]
+
+        for game in recent_games:
+            # Format the date for display
+            iso_date = game.get("date", "")
+            try:
+                if iso_date.endswith('Z'):
+                    iso_date = iso_date[:-1]
+                dt_eastern = datetime.fromisoformat(iso_date).replace(tzinfo=ZoneInfo("America/New_York"))
+                dt_central = dt_eastern.astimezone(ZoneInfo("America/Chicago"))
+                game["readable_date"] = dt_central.strftime("%B %d, %Y, %-I:%M %p")
+            except Exception:
+                game["readable_date"] = "Date unavailable"
+            
+            # Format the score for display
+            try:
+                home_score = game["scores"]["total"]["home"]["points"]
+                away_score = game["scores"]["total"]["away"]["points"]
+                game["score_display"] = f"{away_score} - {home_score}"
+            except Exception:
+                game["score_display"] = "Score not available"
+        return recent_games
+    else:
+        # Handle the error: show error message
+        print("data is:", data)
+        return "There was an error - sorry!"
+
 @app.route("/")
 def show_games():
 
     # set the date to today's date:
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    # 1. Define the API URL
+    # Define the API URL
 
     url = f"https://api.sportsblaze.com/wnba/v1/schedule/daily/{today}.json?key=sb1d4svo6l0foz1sdnberho"
 
     try:
-        # 2. Make the GET request
+        # Make the GET request
         response = requests.get(url)
 
-        # 3. Check for successful response
+        # Check for successful response
         if response.status_code == 200:
-            # 4. Parse JSON, pull out games
+            # Parse JSON, pull out games
 
             data = response.json()
             games = data.get("games", [])
@@ -48,8 +92,8 @@ def show_games():
 
                 # score handling
                 try:
-                    home_score = game["scores"]["home"]
-                    away_score = game["scores"]["away"]
+                    home_score = game["scores"]["total"]["home"]["points"]
+                    away_score = game["scores"]["total"]["away"]["points"]
                     game["score_display"] = f"{away_score} - {home_score}"
                 except Exception as e:
                     game["score_display"] = "Score not available"
@@ -61,8 +105,9 @@ def show_games():
 
                 output += f"{away_team} at {home_team} - {venue} on {date} <br>"
             
-            # 5. Return/render something displaying games
-            return render_template("games.html", games=games)
+            # Return/render something displaying games
+            recent_games = get_recent_games(num=5)
+            return render_template("games.html", games=games, recent_games=recent_games)
         else:
             # Handle the error: show error message
             return "There was an error - sorry!"
@@ -71,15 +116,3 @@ def show_games():
         return f"There was an error: {e}"
     
     
-
-
-
-
-
-
-
-# def jprint(obj):  
-#     text = json.dumps(obj, sort_keys=True, indent=4) 
-#     print(text) 
-
-# jprint(response.json())
