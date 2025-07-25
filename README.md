@@ -4,7 +4,7 @@ A project built for the Boot.dev Hackathon Weekend. The main goal of this projec
 ## Setup Instructions
 1. Clone the repository
 2. Create and activate a virtual environment
-  -  ``` python3 -m venv venv
+  ``` python3 -m venv venv
   source venv/bin/activate  # On Linux/Mac
   # or
   venv\Scripts\activate     # On Windows ```
