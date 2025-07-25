@@ -3,6 +3,7 @@ import json
 from flask import Flask, render_template
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
+from urllib.parse import quote
 
 app = Flask(__name__)
 
@@ -28,6 +29,8 @@ def show_games():
 
             output = ""
             for game in games:
+
+                # date handing 
                 iso_date = game["date"] # e.g., "2025-07-25T19:30:00Z"
                 try:
                     # Remove the trailing 'Z' because it's served in Eastern time, not UTC
@@ -42,6 +45,14 @@ def show_games():
                 except Exception as e:
                     print(f"Failed to parse date: {iso_date}. Reason: {e}")
                     game["readable_date"] = "Date unavailable"
+
+                # score handling
+                try:
+                    home_score = game["scores"]["home"]
+                    away_score = game["scores"]["away"]
+                    game["score_display"] = f"{away_score} - {home_score}"
+                except Exception as e:
+                    game["score_display"] = "Score not available"
 
                 home_team = game["teams"]["home"]["name"]
                 away_team = game["teams"]["away"]["name"]
