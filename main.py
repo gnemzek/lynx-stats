@@ -1,15 +1,19 @@
 import requests
 import json
 from flask import Flask, render_template
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
 
 @app.route("/")
 def show_games():
+
+    # set the date to today's date:
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     # 1. Define the API URL
 
-    url = "https://api.sportsblaze.com/wnba/v1/schedule/daily/2025-07-25.json?key=sb1d4svo6l0foz1sdnberho"
+    url = f"https://api.sportsblaze.com/wnba/v1/schedule/daily/{today}.json?key=sb1d4svo6l0foz1sdnberho"
 
     try:
         # 2. Make the GET request
@@ -24,15 +28,21 @@ def show_games():
 
             output = ""
             for game in games:
-                iso_date = game["date"]
+                iso_date = game["date"] # e.g., "2025-07-25T19:30:00Z"
                 try:
-                #parse the date
-                    dt = datetime.fromisoformat(iso_date.replace("Z", "+00:00"))
+                    # Remove the trailing 'Z' because it's served in Eastern time, not UTC
+                    if iso_date.endswith('Z'):
+                        iso_date = iso_date[:-1]
+                    # Parse as naive datetime, then attach Eastern tz
+                    dt_eastern = datetime.fromisoformat(iso_date).replace(tzinfo=ZoneInfo("America/New_York"))
+                    #Conver to Central Time
+                    dt_central = dt_eastern.astimezone(ZoneInfo("America/Chicago"))
                     #format date
-                    game["readable_date"] = dt.strftime("%B %d, %Y, %-I:%M %p")
-                except Exception:
+                    game["readable_date"] = dt_central.strftime("%B %d, %Y, %-I:%M %p")
+                except Exception as e:
+                    print(f"Failed to parse date: {iso_date}. Reason: {e}")
                     game["readable_date"] = "Date unavailable"
-                    
+
                 home_team = game["teams"]["home"]["name"]
                 away_team = game["teams"]["away"]["name"]
                 date = game["readable_date"]
