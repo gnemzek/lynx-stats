@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+  <body>
+    <h1>Upcoming WNBA Games</h1>
+    <ul>
+      {% for game in games %}
+        <li>
+          {{ game.teams.away.name }} at {{ game.teams.home.name }} —
+          {{ game.venue.name }} on {{ game.readable_date }}
+        </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
