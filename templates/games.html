@@ -9,6 +9,8 @@
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.typekit.net/aqd8lcf.css">
+    <link rel="shortcut icon" href="https://stats.wnba.com/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Roboto+Condensed" rel="stylesheet">
     <title>Lynx Fan Dashboard</title>
 </head>
 
@@ -25,9 +27,8 @@
 
                 {% for game in games %}
                 <p>
-                    <span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span><br>
+                    <span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span> <span class="game-status badge badge-{{game.status}}"> {{game.status}}</span> <br>
                     <span class="game-date">{{ game.venue.name }} on {{ game.readable_date }}</span> <br>
-                    <span class="game-status"> {{game.status }}</span> <br>
                     <span class="recent-score">{{ game.score_display }}</span>
                 </p>
                 {% endfor %}
@@ -47,10 +48,22 @@
             </div>
         </div>
 
+        <!-- <div class="col-md-6 col-12 daily-scores">
+
+              {% for game in todays_games %}
+                <p>
+                    <span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span> <span class="game-status badge badge-{{game.status}}"> {{game.status}}</span> <br>
+                    <span class="game-date">{{ game.venue.name }} on {{ game.readable_date }}</span> <br>
+                    <span class="recent-score">{{ game.score_display }}</span>
+                </p>
+                {% endfor %}
+
+        </div> -->
+
 
         <div class="row leaderboard">
             <h2>Lynx Leaderboard</h2>
-            {% for player in lynx_players %}
+            {% for player in top_lynx_players %}
             <div class="col-md-4 col-12 leaderboard-player-wrapper">
                 <div class="leaderboard-player-inner">
                     <h3>{{ player.name }}</h3>
@@ -62,6 +75,7 @@
             {% endfor %}
         </div>
 
+        <div class="justify-content-center d-flex"><a href="{{ url_for('lynx_roster') }}" class="btn btn-success">See full roster</a></div>
 
     </div>
 </body>

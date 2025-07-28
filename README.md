@@ -1,5 +1,5 @@
-# wnba-stats
-A project built for the Boot.dev Hackathon Weekend. The main goal of this project is to gather important information about upcoming WNBA games, adding those games to your personal calendar, seeing top players from the upcoming games, etc. This is a project meant for casual WNBA fans who would like some extra info. 
+# Lynx Stats
+A project built for the Boot.dev Hackathon Weekend. The main goal of this project is to gather important information about upcoming WNBA games, seeing the top Lynx players and the full roster, and dialing down into individual player stats. This is a project meant for casual WNBA fans who would like some extra info. 
 
 ## Setup Instructions
 
@@ -49,5 +49,9 @@ A project built for the Boot.dev Hackathon Weekend. The main goal of this projec
 ## Limitations
 
 Due to API limitations, all games do not appear in the inidivdual players' gamelog pages. 
+
+API does not update as frequently as scores do - this is not a project for seeing realtime score updates. 
+
+Recent games may not be up-to-date because of frequency of API updates. 
 
 

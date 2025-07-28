@@ -15,32 +15,28 @@
 </head>
 
 <body>
-      <a href="{{ url_for('show_games') }}"> <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Minnesota Lynx Fan Dashboard"
+    <a href="{{ url_for('show_games') }}"> <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Minnesota Lynx Fan Dashboard"
         class="img-fluid"> </a>
     <div class="stats-header">
-        <h1>Stats for {{ player.name }}</h1>
+        <h1>Minnesota Lynx Roster</h1>
     </div>
     <div class="container">
-        <p><i>Note: due to API limitations, only a portion of this player's games may appear.</i></p>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Opponent</th>
-                <th>Points</th>
-                <th>Rebounds</th>
-                <th>Assists</th>
-            </tr>
-            {% for game in games %}
-            <tr>
-                <td>{{ game.date }}</td>
-                <td>{{ game.teams.away.name }} vs {{ game.teams.home.name }}</td>
-                <td>{{ game.stats.points }}</td>
-                <td>{{ game.stats.rebounds }}</td>
-                <td>{{ game.stats.assists }}</td>
-            </tr>
+        <div class="row leaderboard">
+            {% for player in roster %}
+            <div class="col-md-4 col-12 leaderboard-player-wrapper">
+                <div class="leaderboard-player-inner">
+                    <h3>{{ player.name }}</h3>
+                    <p>{{ player.stats.average.points | round(1) }} PPG </p>
+                    <a href="{{ url_for('player_gamelog', player_id=player.id) }}">
+                    <img src="{{ player.headshot }}" alt="{{ player.name }} headshot" class="img-fluid player-headshot"></a>
+                </div>
+                <div class="player-number">{{ player.number }}</div>
+            </div>
             {% endfor %}
-        </table>
+        </div>
+
     </div>
+
 </body>
 
 </html>

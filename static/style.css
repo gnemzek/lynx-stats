@@ -10,6 +10,7 @@
 
 .main-container {
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 h1, h2{
@@ -31,6 +32,14 @@ h2 {
 p, a {
     font-family: roc-grotesk, Helvetica, Arial, Roboto, sans-serif;
 }
+/* headers */
+.stats-header {
+    padding: 30px;
+    text-align: center;
+    color: white;
+    background: #0a1c32;
+    margin-bottom: 30px;
+}
 
 /* Today/Past Game Styles */
 .past-games,
@@ -43,6 +52,10 @@ span.game-title {
     font-size: 20px;
 }
 
+.badge-Scheduled {
+    background: #6c757d;
+}
+
 /* Leaderboard Styles */
 
 .leaderboard {
@@ -52,6 +65,7 @@ span.game-title {
 .leaderboard-player-wrapper {
     margin-bottom: 30px;
     padding: 10px 10px 0 10px;
+    position: relative;
 }
 
 .leaderboard-player-inner {
@@ -70,4 +84,14 @@ span.game-title {
 .leaderboard a {
     display: block;
     margin-bottom: 20px
+}
+
+/* Lynx Roster styles */
+
+.player-number {
+    position: absolute;
+    bottom: 8px;
+    right: 25px;
+    font-size: 3em;
+    color: white;
 }
