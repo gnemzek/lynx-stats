@@ -244,11 +244,24 @@ def player_gamelog(player_id):
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        print(data.keys())
-        print(data.get("results"))
-        print(data.get("total"))
         player = data.get("player", {})
         games = data.get("games", [])
+        for game in games:
+            # date handing 
+            iso_date = game["date"] # e.g., "2025-07-25T19:30:00Z"
+            try:
+                # Remove the trailing 'Z' because it's served in Eastern time, not UTC
+                if iso_date.endswith('Z'):
+                    iso_date = iso_date[:-1]
+                    # Parse as naive datetime, then attach Eastern tz
+                    dt_eastern = datetime.fromisoformat(iso_date).replace(tzinfo=ZoneInfo("America/New_York"))
+                    #Conver to Central Time
+                    dt_central = dt_eastern.astimezone(ZoneInfo("America/Chicago"))
+                    #format date
+                    game["readable_date"] = dt_central.strftime("%B %d, %Y, %-I:%M %p")
+            except Exception as e:
+                print(f"Failed to parse date: {iso_date}. Reason: {e}")
+                game["readable_date"] = "Date unavailable"
         player["headshot"] = headshot_map.get(player["id"])
         player["number"] = number_map.get(player["id"])
         return render_template("player_gamelog.html", player=player, games=games)

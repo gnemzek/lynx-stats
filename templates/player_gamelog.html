@@ -35,7 +35,7 @@
                     </tr>
                     {% for game in games %}
                     <tr>
-                        <td>{{ game.date }}</td>
+                        <td>{{ game.readable_date }}</td>
                         <td>{{ game.teams.away.name }} vs {{ game.teams.home.name }}</td>
                         <td>{{ game.stats.points }}</td>
                         <td>{{ game.stats.rebounds }}</td>
