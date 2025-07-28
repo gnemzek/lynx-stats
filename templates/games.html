@@ -40,9 +40,8 @@
 
                 {% for game in recent_games %}
                 <p>
-                    <span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span><br>
+                    <span class="game-score badge badge-info">{{ game.scores.total.away.points }} </span><span class="game-title">{{ game.teams.away.name }} at {{ game.teams.home.name }} </span><span class="game-score badge badge-info">{{ game.scores.total.home.points }}</span><br>
                     <span class="game-date"> {{ game.readable_date }}</span> <br>
-                    <span class="recent-score">{{ game.score_display }}</span>
                 </p>
                 {% endfor %}
             </div>

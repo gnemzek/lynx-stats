@@ -13,7 +13,8 @@
     margin-bottom: 30px;
 }
 
-h1, h2{
+h1,
+h2 {
     font-family: roc-grotesk, Helvetica, Arial, Roboto, sans-serif;
     font-weight: bold !important;
 }
@@ -29,9 +30,11 @@ h2 {
     padding: 10px;
 }
 
-p, a {
+p,
+a {
     font-family: roc-grotesk, Helvetica, Arial, Roboto, sans-serif;
 }
+
 /* headers */
 .stats-header {
     padding: 30px;
@@ -54,6 +57,19 @@ span.game-title {
 
 .badge-Scheduled {
     background: #6c757d;
+}
+
+.badge-info {
+    background: #17a2b8;
+}
+
+.badge {
+    vertical-align: text-bottom !important;
+    padding: 5px 10px 3px 10px !important;
+}
+
+.game-score.badge.badge-info {
+    margin-right: 5px;
 }
 
 /* Leaderboard Styles */
