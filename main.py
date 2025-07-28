@@ -222,6 +222,22 @@ def show_games():
     
 @app.route("/players/<player_id>")
 def player_gamelog(player_id):
+    # grab headshots from Lynx players 
+    season = 2025
+    roster_url = f"https://api.sportsblaze.com/wnba/v1/rosters/{season}.json?key={api_key}&team=Minnesota%20Lynx"
+    roster_response = requests.get(roster_url)
+    headshot_map = {}
+    number_map = {}
+    if roster_response.status_code == 200:
+        roster_data = roster_response.json()
+        if roster_data.get("teams"):
+            for player in roster_data["teams"][0].get("roster", []):
+                headshot_map[player["id"]] = player.get("headshot")
+                number_map[player["id"]] = player.get("number")
+        else:
+            print("Error fetching roster:", roster_response.status_code)
+            return []
+        
     # Fetch gamelogs for this player from the API
     season = 2025
     url = f"https://api.sportsblaze.com/wnba/v1/gamelogs/players/{season}/{player_id}.json?key={api_key}"
@@ -233,6 +249,8 @@ def player_gamelog(player_id):
         print(data.get("total"))
         player = data.get("player", {})
         games = data.get("games", [])
+        player["headshot"] = headshot_map.get(player["id"])
+        player["number"] = number_map.get(player["id"])
         return render_template("player_gamelog.html", player=player, games=games)
     else:
         return f"Could not fetch gamelog for this player (status {response.status_code})"

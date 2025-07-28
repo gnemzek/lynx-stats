@@ -111,3 +111,8 @@ span.game-title {
     font-size: 3em;
     color: white;
 }
+
+/* Individual Gamelog stats styles */
+tbody, td, tfoot, th, thead, tr {
+    padding: 4px;
+}

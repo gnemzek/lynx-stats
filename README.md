@@ -2,7 +2,7 @@
 A project built for the Boot.dev Hackathon Weekend. The main goal of this project is to gather important information about upcoming WNBA games, seeing the top Lynx players and the full roster, and dialing down into individual player stats. This is a project meant for casual WNBA fans who would like some extra info. 
 
 ## Demo
-For a live demo (so you don't have to get your own API key and set it up locally) please see: [https://lynx-stats.onrender.com/](https://lynx-stats.onrender.com/)
+For a live demo (so you don't have to get your own API key and set it up locally) please see: [https://lynx-stats.onrender.com/](https://lynx-stats.onrender.com/). (This might take up to a minute to load depending on when the last render was.)
 
 ## Setup Instructions
 
